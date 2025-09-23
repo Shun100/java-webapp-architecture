@@ -1,0 +1,30 @@
+services:
+  app:
+    build: ./app
+    ports:
+      - "8080:8080" # アプリケーション用 (HTTP)
+      - "4848:4848" # Payra Admin Console
+    depends_on:
+      - db
+    networks:
+      - appnetwork # Dockerは自動的にネットワークを作成するので書かなくても問題ない。勉強のために明示している。
+  
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: java-webapp-architecture
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - appnetwork # Dockerは自動的にネットワークを作成するので書かなくても問題ない。勉強のために明示している。
+
+volumes:
+  pgdata:
+
+networks:
+  appnetwork:
+    driver: bridge
