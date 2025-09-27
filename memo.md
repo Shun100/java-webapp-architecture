@@ -115,3 +115,37 @@ flowchart LR
 ``` Java
   response.sendRedirect(request.getContextPath() + "/RedirectPage");
 ```
+
+## 4.2.2 フィルタ
+
+- Webブラウザから送信されたHTTPリクエストをインターセプトし、サーブレット・JSPページの呼び出し前後に任意の処理を組み込むためのコンポーネント。
+
+``` mermaid
+flowchart LR
+  browser["Webブラウザ"]
+
+  subgraph JavaEEコンテナ
+    filter["フィルタ"]
+    servlet["呼び出し対象のサーブレット・JSP"]
+  end
+
+  browser -- HTTPリクエスト --> filter;
+  filter -- HTTPリクエスト --> servlet;
+  servlet -- HTTPレスポンス --> filter;
+  filter -- HTTPレスポンス --> browser;
+```
+
+``` Java
+  @WebServlet("/PersonServlet")
+  public class PersonFilter extends Filter {
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+      // 何らかの前処理を行う
+
+      // HTTPリクエスト・HTTPレスポンスを転送する
+      chain.doFilter(req, res);
+
+      // 何らかの後処理を行う
+    }
+  }
+```
