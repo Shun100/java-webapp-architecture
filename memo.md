@@ -149,3 +149,53 @@ flowchart LR
     }
   }
 ```
+
+## 4.2.4 他システムとの連携方式
+
+- リダイレクト方式
+
+``` mermaid
+flowchart LR
+  browser_src["Webページ(遷移元)"]
+  browser_dst["Webページ(遷移先)"]
+
+  subgraph JavaEEコンテナ1
+    servlet_src["コントローラ(Servlet)"]
+  end
+
+  subgraph JavaEEコンテナ2
+    servlet_dst["ビュー(JSP)"]
+  end
+
+  browser_src -- HTTPリクエスト --> servlet_src;
+  servlet_src -- HTTPレスポンス<br>(302 or 303) --> browser_src;
+  browser_src -- HTTPリクエスト --> servlet_dst;
+  servlet_dst -- HTTPレスポンス --> browser_dst;
+
+  browser_src -- 画面遷移 --> browser_dst;
+```
+
+- 空ページ自動サブミット方式
+  - windowオブジェクトのonloadプロパティにイベントハンドラを設定することによって、空ページがロードされた直後に自動的にフォームをサブミットする。
+  - リダイレクト方式と異なり、POSTメソッドで他システムと連携できる点が特徴。
+
+``` HTML
+  <script type="text/javascript">
+    window.onload = function() {
+      document.forms[0].submit();
+    }
+  </script>
+
+  <body>
+    <form action="連携先のURL" method="POST">
+      <!-- inputタグはhiddenにして非表示にする -->
+      <input type="hidden" name="personName" value="${personName}">
+      <input type="hidden" name="age" value="${personAge}">
+    </form>
+  </body>
+```
+
+## 4.3 セッション管理方式
+
+- TODO: 大規模システム向けの内容なので優先度を下げて、次回まとめる。
+
