@@ -20,6 +20,7 @@ import com.example.java_web_app_architecture.dto.Person;
 public class PersonAction {
   @Inject
   private PersonService personService;
+  private final int NOT_REGISTERED = 0;
 
   /**
    * 「入力画面」に遷移する。
@@ -32,12 +33,18 @@ public class PersonAction {
 
   /**
    * 「確認画面」に遷移する。
+   * <p>
+   * @ModelAttribute: 送信されたフォームの入力値を自動的にPOJOに格納する。
+   * @Valid: Bean Validationを利用する。
+   *        （@NotNull, @NotEmpty, @Size, @Pattern, @Min, @Max, @DecimanMin, @DecimanMax等）
+   * BindingResult: バリデーションで検出したエラーの格納先
+   * </p>
    * @param Person person - 登録者情報
    * @param BindingResult errors
    * @param HttpSession session - セッションオブジェクト
    * @return String page - 遷移先の画面のHTML
    */
-  @RequestMapping("/confimr")
+  @RequestMapping("/confirm")
   public String confirm(@ModelAttribute @Valid Person person, BindingResult errors, HttpSession session) {
     if (errors.hasErrors()) {
       return "PersonInputPage";
@@ -65,7 +72,7 @@ public class PersonAction {
   @RequestMapping("/update")
   public String updatePerson(Model model, HttpSession session) {
     Person person = (Person) session.getAttribute("person");
-    if (person.getPersonId() == null) {
+    if (person.personId() == NOT_REGISTERED) {
       // 新規登録
       personService.addPerson(person);
     } else {
