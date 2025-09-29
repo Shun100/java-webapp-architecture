@@ -6,27 +6,15 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class Person {
-  private int personId;
+public record Person(
+  int personId,
 
   @NotNull @NotEmpty @Size(min=1, max=15)
-  private String personName;
+  String personName,
 
-  @NotNull @Min(20) @Max(100)
-  private int age;
+  @Min(20) @Max(100)
+  int age,
 
   @NotNull @NotEmpty
-  private String gender;
-
-  public Person() {};
-  public Person(int personId, String personName, int age, String gender) {
-    this.personId = personId;
-    this.personName = personName;
-    this.age = age;
-    this.gender = gender;
-  }
-
-  public void setPersonId(int personId) {
-    this.personId = personId;
-  }
-}
+  String gender
+) {}
