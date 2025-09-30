@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import com.example.java_web_app_architecture.dto.Person;
+import com.example.java_web_app_architecture.service.PersonService;
 
 @Controller
 public class PersonAction {
@@ -97,8 +99,8 @@ public class PersonAction {
    */
   @RequestMapping("/edit")
   public String editPerson(@RequestParam("personId") int personId, Model model) {
-    Person person = personService.getPerson(personId);
-    model.addAttribute("person", person);
+    Optional<Person> optionalPerson = personService.getPerson(personId);
+    optionalPerson.ifPresent(person -> model.addAttribute("person", person));
     return "PersonInputPage";
   }
 
@@ -111,6 +113,7 @@ public class PersonAction {
   @RequestMapping("/remove")
   public String removePerson(@RequestParam("personId") int personId, Model model) {
     // WIP
+    return "";
   }
 
   /**
