@@ -17,7 +17,7 @@ public class PersonService {
   }
 
   public void addPerson(Person person) {
-    if (!isRegistered(person.personId())) {
+    if (!personExists(person.personId())) {
       personList.add(person);
     }
   }
@@ -25,7 +25,7 @@ public class PersonService {
   public void updatePerson(Person person) {
     int personId = person.personId();
 
-    if (isRegistered(personId)) {
+    if (personExists(personId)) {
       personList.removeIf(p -> p.personId() == personId);
       personList.add(person);
     }
@@ -35,7 +35,7 @@ public class PersonService {
     return personList;
   }
 
-  private boolean isRegistered(int personId) {
+  private boolean personExists(int personId) {
     return personList.stream()
       .anyMatch(person -> person.personId() == personId);
   }
